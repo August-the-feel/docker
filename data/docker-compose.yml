@@ -5,46 +5,11 @@ networks:
     driver: bridge
 # 服务容器配置
 services: 
-  nginx:                                                          # 自定义容器名称
-    container_name: nginx 
-    build:                                                        # 添加空格&nbps
-      context: ../nginx                                           # 指定构建使用的 Dockerfile 文件
-    environment:                                                  # 设置环境变量
-      - TZ=Asia/Shanghai
-    volumes:                                                      # 设置挂载目录
-      - /Users/zhangyuze/docker/nginx/:/etc/nginx/                #映射配置文件目录
-      - /Users/zhangyuze/docker/nginx/log/:/var/log/nginx         #映射log目录查看错误信息
-      - /Users/zhangyuze/www/wwwroot:/usr/share/nginx/html                    # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
-    ports:                                                        # 设置端口映射
-      - "80:80"
-      - "443:443"
-    networks: 
-      - backend
-    restart: always                                               # 指定容器退出后的重启策略为始终重启
-  php: 
-    container_name: php
-    depends_on: 
-      - nginx
-    build: 
-      context: ../php
-    environment: 
-      - TZ=Asia/Shanghai
-    volumes: 
-      - /Users/zhangyuze/www/wwwroot:/var/www/html                # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
-    ports: 
-      - "9000:9000"                                               # 设置容器9000端口映射指定宿主机端口
-    stdin_open: true
-    tty: true
-    networks: 
-      - backend
-    restart: always
   mysql: 
     image: mysql/mysql-server:latest
     container_name: mysql
     hostname: mysql                                               # 设置链接地址
     privileged: true
-    depends_on: 
-      - php
     environment: 
       - TZ=Asia/Shanghai
       - MYSQL_USER=root                                           # 设置 Mysql 用户名称
@@ -65,8 +30,6 @@ services:
     restart: always
   redis: 
     container_name: redis
-    depends_on: 
-      - php
     build: 
       context: ../redis
     environment: 
@@ -79,3 +42,39 @@ services:
     networks: 
       - backend
     restart: always
+  php: 
+    container_name: php
+    build: 
+      context: ../php
+    environment: 
+      - TZ=Asia/Shanghai
+    volumes: 
+      - /Users/zhangyuze/www/wwwroot:/var/www/html                # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
+    links:
+      - mysql
+      - redis
+    ports: 
+      - "9000:9000"                                               # 设置容器9000端口映射指定宿主机端口
+    stdin_open: true
+    tty: true
+    networks: 
+      - backend
+    restart: always
+  nginx:                                                          # 自定义容器名称
+    container_name: nginx 
+    build:                                                        # 添加空格&nbps
+      context: ../nginx                                           # 指定构建使用的 Dockerfile 文件
+    environment:                                                  # 设置环境变量
+      - TZ=Asia/Shanghai
+    volumes:                                                      # 设置挂载目录
+      - /Users/zhangyuze/docker/nginx/:/etc/nginx/                #映射配置文件目录
+      - /Users/zhangyuze/docker/nginx/log/:/var/log/nginx         #映射log目录查看错误信息
+      - /Users/zhangyuze/www/wwwroot:/usr/share/nginx/html                    # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
+    links:
+      - php
+    ports:                                                        # 设置端口映射
+      - "80:80"
+      - "443:443"
+    networks: 
+      - backend
+    restart: always                                               # 指定容器退出后的重启策略为始终重启
