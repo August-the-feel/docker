@@ -1,5 +1,9 @@
 # docker
 
+先进行docker run --name nginx -itd nginx:latest 
+docker cp nginx:docker cp nginx:/etc/nginx/ /Users/zhangyuze/docker/nginx
+将 nginx.conf 放到docker/nginx的根目录下
+
 运行 docker compose up -d 
 
 mysql 远程连接设置
