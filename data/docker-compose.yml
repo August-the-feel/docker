@@ -15,7 +15,7 @@ services:
       - MYSQL_USER=root                                           # 设置 Mysql 用户名称
       - MYSQL_ROOT_PASSWORD=qwer1234                              # 设置 Mysql root 用户密码
     volumes: 
-       - /Users/zhangyuze/docker/mysql/mysql-files:/var/lib/mysql-files
+       - ${PATH_HOST}/docker/mysql/mysql-files:/var/lib/mysql-files
        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql                   # 引用 .env 配置中 DATA_PATH_HOST 变量，将宿主机上存放 Mysql 数据的目录挂载到容器中 /var/lib/mysql 目录
     command:
          --character-set-server=utf8mb4
@@ -35,7 +35,7 @@ services:
     environment: 
       - TZ=Asia/Shanghai
     volumes: 
-      - /Users/zhangyuze/docker/redis/conf/redis.conf             # 配置文件存放位置
+      - ${PATH_HOST}/docker/redis/conf/redis.conf             # 配置文件存放位置
       - ./data/redis:/data                                        # 引用 .env 配置中 DATA_PATH_HOST 变量，将宿主机上存放 Redis 数据的目录挂载到容器中 /data 目录
     ports: 
       - "6379:6379"                                               # 设置容器6379端口映射指定宿主机端口
@@ -49,7 +49,7 @@ services:
     environment: 
       - TZ=Asia/Shanghai
     volumes: 
-      - /Users/zhangyuze/www/wwwroot:/var/www/html                # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
+      - ${PATH_HOST}/www/wwwroot:/var/www/html                # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
     links:
       - mysql
       - redis
@@ -67,9 +67,9 @@ services:
     environment:                                                  # 设置环境变量
       - TZ=Asia/Shanghai
     volumes:                                                      # 设置挂载目录
-      - /Users/zhangyuze/docker/nginx/:/etc/nginx/                #映射配置文件目录
-      - /Users/zhangyuze/docker/nginx/log/:/var/log/nginx         #映射log目录查看错误信息
-      - /Users/zhangyuze/www/wwwroot:/usr/share/nginx/html                    # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
+      - ${PATH_HOST}/docker/nginx/:/etc/nginx/                #映射配置文件目录
+      - ${PATH_HOST}/docker/nginx/log/:/var/log/nginx         #映射log目录查看错误信息
+      - ${PATH_HOST}/www/wwwroot:/usr/share/nginx/html                    # 引用 .env 配置中 WWW_PATH_HOST 变量，将宿主机上代码存放的目录挂载到容器中 /usr/share/nginx/html 目录
     links:
       - php
     ports:                                                        # 设置端口映射

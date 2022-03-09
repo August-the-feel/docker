@@ -1,20 +1,28 @@
 # docker
 
-先进行docker run --name nginx -itd nginx:latest 
-docker cp nginx:docker cp nginx:/etc/nginx/ /Users/zhangyuze/docker/nginx
-将 nginx.conf 放到docker/nginx的根目录下
+1. 先进行复制nginx.conf文件 放到 ...(替换为自己路径和.env中的路径一致)/docker/nginx 目录下面 
+```dockerfile
+ docker run --name nginx -itd nginx:latest 
+ docker cp nginx:docker cp nginx:/etc/nginx/ ...(替换为自己路径和.env中的路径一致)/docker/nginx
+```
 
-运行 docker compose up -d 
+将 nginx.conf 放到docker/nginx的根目录下 其他文件删除掉
+
+运行 
+
+```dockerfile
+ docker compose up -d 
+```
 
 mysql 远程连接设置
 
 ```mysql
-# docker logs mysql_mysql_1 2>&1 | grep GENERATED
-# docker exec -it  mysql_mysql_1 bash
+# docker logs (mysql容器名称) 2>&1 | grep GENERATED
+# docker exec -it  (mysql容器名称) bash
 # mysql -uroot -p
-# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'qwer1234';
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '自定义密码';
 # flush privileges;
-# CREATE USER 'root'@'%' IDENTIFIED BY 'qwer1234';
+# CREATE USER 'root'@'%' IDENTIFIED BY '自定义密码';
 # GRANT ALL ON *.* TO 'root'@'%';
 # flush privileges;
 ```
@@ -70,12 +78,12 @@ services:
     ports:
       - "3306:3306"
     restart: always
-# docker logs mysql_mysql_1 2>&1 | grep GENERATED
-# docker exec -it  mysql_mysql_1 bash
+# docker logs (mysql容器名称) 2>&1 | grep GENERATED
+# docker exec -it  (mysql容器名称) bash
 # mysql -uroot -p
-# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'qwer1234';
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '自定义密码';
 # flush privileges;
-# CREATE USER 'root'@'%' IDENTIFIED BY 'qwer1234';
+# CREATE USER 'root'@'%' IDENTIFIED BY '自定义密码';
 # GRANT ALL ON *.* TO 'root'@'%';
 # flush privileges;
 ```
