@@ -3,7 +3,7 @@
 1. 先进行复制nginx.conf文件 放到 ...(替换为自己路径和.env中的路径一致)/docker/nginx 目录下面 
 ```dockerfile
  docker run --name nginx -itd nginx:latest 
- docker cp nginx:docker cp nginx:/etc/nginx/ ...(替换为自己路径和.env中的路径一致)/docker/nginx
+ docker cp nginx:/etc/nginx/ ...(替换为自己路径和.env中的路径一致)/docker/nginx
 ```
 
 将 nginx.conf 放到docker/nginx的根目录下 其他文件删除掉
